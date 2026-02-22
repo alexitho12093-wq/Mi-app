@@ -1,43 +1,56 @@
-index.html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Mi App Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin:0;
-      font-family: Arial;
-      background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-      color:white;
-      text-align:center;
-    }
-    .card {
-      margin:50px auto;
-      padding:20px;
-      width:90%;
-      max-width:400px;
-      background:#111;
-      border-radius:15px;
-      box-shadow:0 0 20px #00f7ff;
-    }
-    button {
-      padding:12px 20px;
-      border:none;
-      border-radius:8px;
-      background:#00f7ff;
-      font-weight:bold;
-      cursor:pointer;
-    }
-  </style>
-</head>
-<body>
+const express = require("express");
+const crypto = require("crypto");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const cors = require("cors");
 
-  <div class="card">
-    <h1>🔥 Mi App Pro</h1>
-    <p>Bienvenido Jesús Alejandro 🚀</p>
-    <button onclick="alert('App funcionando')">Probar</button>
-  </div>
+const app = express();
 
-</body>
-</html>
+// Seguridad avanzada
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+
+// Protección contra spam y ataques
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+app.use(limiter);
+
+// Sistema simple de encriptación
+function encrypt(text) {
+  return crypto.createHash("sha256").update(text).digest("hex");
+}
+
+// IA simulada avanzada
+function artificialIntelligence(input) {
+  if (input.includes("seguridad")) {
+    return "Sistema seguro activado.";
+  }
+  if (input.includes("crear app")) {
+    return "Te ayudo a crear una aplicación avanzada.";
+  }
+  return "Estoy aprendiendo... dame más información.";
+}
+
+// Ruta principal
+app.get("/", (req, res) => {
+  res.send("🔥 Servidor IA Potente Activo");
+});
+
+// Endpoint IA
+app.post("/ai", (req, res) => {
+  const userInput = req.body.message;
+  const response = artificialIntelligence(userInput);
+  res.json({
+    encryptedUserMessage: encrypt(userInput),
+    aiResponse: response,
+  });
+});
+
+// Puerto
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
+});
